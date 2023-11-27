@@ -38,10 +38,9 @@ function App() {
    <h1>Nasa James Webb</h1>
   
     <div className='container'>
-     <div className='date-section'>
+     <div>
       <p>Fecha actual: {today}</p>
       <input
-      className='date-input'
         type="date"
         value={date}
         onChange={handleInput}
