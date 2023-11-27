@@ -1,0 +1,32 @@
+#root {
+  max-width: 80vh;
+  margin: 0;
+  padding: 2rem;
+  text-align: center;
+}
+
+h1{
+
+  font-family: 'Helvetica', sans-serif;
+    color: white;
+    padding: 20px;
+    background-color: rgb(5, 0, 100);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 95%;
+}
+
+.figure{
+  max-width: 100vh;
+  overflow: hidden;
+}
+.figure img{
+width:  100%;
+display: block;
+}
+
+.figure-footer{
+border-radius: 10px;
+border: 1px solid white;
+
+}
