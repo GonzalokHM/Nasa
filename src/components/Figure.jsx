@@ -1,15 +1,22 @@
 import PropTypes from 'prop-types';
 
-const Figure = ({ title, date, explanation, url, copyright }) => {
+const Figure = ({ title, date, explanation, url, copyright, img_src, camera, earth_date, sol, api }) => {
+  // Obtener el nombre de la cámara
+  const cameraName = camera ? camera.full_name : null;
+
+ // Verificar si el título y la URL están presentes, de lo contrario, usar propiedades de la cámara
+ const renderedTitle = title || cameraName;
+ const renderedUrl = url ||img_src; 
+
   return (
     <div className='figure'>
-      <h2>{title}</h2>
-      <img src={url} alt={title} />
+      <h2>{renderedTitle}</h2>
+      <img src={renderedUrl} alt={title || cameraName}/>
       <div>
-        <p>{explanation}</p>
+        <p>{explanation} || This image corresponds to the Martian sol:{sol}</p>
         <div className='figure-footer'>
-        <p>Esta imagen corresponde con la fecha: {date}</p>
-        <p>copyright:{copyright}</p>
+        <p>This image corresponds to date: {date||earth_date}</p>
+        {api === 'apod' && <p>copyright:{copyright}</p>}
         </div>
       </div>
     </div>
@@ -17,11 +24,18 @@ const Figure = ({ title, date, explanation, url, copyright }) => {
 };
 
 Figure.propTypes = {
-    title: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-    explanation: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-    copyright: PropTypes.string.isRequired,
+    title: PropTypes.string,
+    date: PropTypes.string,
+    explanation: PropTypes.string,
+    url: PropTypes.string,
+    copyright: PropTypes.string,
+    camera: PropTypes.shape({
+      full_name: PropTypes.string
+    }),
+    earth_date: PropTypes.string,
+    img_src: PropTypes.string,
+    sol:PropTypes.number,
+    api: PropTypes.string
   };
 
 export default Figure;
