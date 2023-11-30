@@ -14,7 +14,11 @@ function App() {
   const [selectedApi, setSelectedApi] = useState('apod');
 
   useEffect(() => {
-    fetchData();
+    try {
+      fetchData();
+    } catch (error) {
+      console.error('Error al cargar datos iniciales', error);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date,selectedApi])
 
@@ -46,14 +50,19 @@ function App() {
 
   const fetchMarsRoversData = () => {
     setLoading(true);
-    // Construir la URL para la solicitud de Mars Rovers con Axios
-    const apiUrl = `${NASA_URL}mars-photos/api/v1/rovers/curiosity/photos?earth_date=${date}&camera=fhaz&api_key=${NASA_API_KEY}`;
-console.log(apiUrl)
+    const cameras = ['FHAZ', 'RHAZ', 'MAST', 'CHEMCAM', 'MAHLI', 'MARDI', 'NAVCAM'];
+    const tryNextCamera = (currentIndex) => {
+      if (currentIndex < cameras.length) {
+        const camera = cameras[currentIndex];
+
+      const apiUrl = `${NASA_URL}mars-photos/api/v1/rovers/curiosity/photos?earth_date=${date}&camera=${camera}&api_key=${NASA_API_KEY}`;
+  console.log(apiUrl)
     axios
       .get(apiUrl)
       .then((response) => {
         console.log('Response from Mars Rovers API:', response.data);
-        const firstPhoto = response.data.photos[0];
+        if (response.data.photos.length > 0) {
+          const firstPhoto = response.data.photos[0];
 
         setMarsData({
           title: firstPhoto.camera.full_name,
@@ -64,14 +73,26 @@ console.log(apiUrl)
           camera: firstPhoto.camera,
           earth_date: firstPhoto.earth_date,
         });
-      })
+    } else {
+            // Intentar la siguiente cámara si no hay fotos en la actual
+            tryNextCamera(currentIndex + 1);
+          }
+        })
       .catch((error) => {
-        console.error('Error al obtener datos de la API de Mars Rovers', error);
+        ('Error al obtener datos de la API de Mars Rovers para la cámara', camera, error);
       })
       .finally(() => {
         setLoading(false);
       });
+    } else {
+      // Si no hay fotos en ninguna cámara
+      console.log('No hay fotos disponibles para ninguna cámara');
+      setLoading(false);
+    }
   };
+
+  tryNextCamera(0);
+};
 
   const fetchData = () => {
     if (selectedApi === 'apod') {
