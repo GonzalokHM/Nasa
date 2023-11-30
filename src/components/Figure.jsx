@@ -13,7 +13,7 @@ const Figure = ({ title, date, explanation, url, copyright, img_src, camera, ear
       <h2>{renderedTitle}</h2>
       <img src={renderedUrl} alt={title || cameraName}/>
       <div>
-        <p>{explanation} || This image corresponds to the Martian sol:{sol}</p>
+        <p className='description'>{explanation} || This image corresponds to the Martian sol:{sol}</p>
         <div className='figure-footer'>
         <p>This image corresponds to date: {date||earth_date}</p>
         {api === 'apod' && <p>copyright:{copyright}</p>}
